@@ -3,13 +3,13 @@
 #define GAMEWAIT 39.998
 
 int characterPos = 40;
+
 int bulletPos = 40;
 bool bullet = false;	//Indicates if the bullet is moving
-bool bulletDir = false;	//Indicates the direction of the bullet, false is left, and true is right
+int bulletDir = -1;	//Indicates the direction of the bullet, -1 is left, and 1 is right
 
 void readInput()
 {
-
 	if (_kbhit()) {
 		char c = _getch();
 
@@ -17,12 +17,12 @@ void readInput()
 		else if (c == 'd' && characterPos < WORLDSIZE)	characterPos++;
 		else if (c == 'q' && !bullet) {
 			bulletPos--;
-			bulletDir = false;
+			bulletDir = -1;
 			bullet = true;
 		}
 		else if (c == 'e' && !bullet) {
 			bulletPos++;
-			bulletDir = true;
+			bulletDir = 1;
 			bullet = true;
 		}
 	}
@@ -31,10 +31,9 @@ void readInput()
 //This function updates the state of the bullet and its position
 void updateBullet()
 {
-
 	if (!bullet) bulletPos = characterPos; //If a bullet is not moving, its position must be equal to the character position
 	else if (bullet) {
-		if (!bulletDir)	bulletPos--;
+		if (bulletDir == -1)	bulletPos--;
 		else bulletPos++;
 	}
 
@@ -63,7 +62,6 @@ int main()
 		updateBullet();
 
 		printWorld();
-
 		printf("\r"); //Returns the cursor to the beginning of the line
 
 		readInput();
